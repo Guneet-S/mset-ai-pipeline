@@ -11,3 +11,6 @@ ARCHITECTURE.md
 TROUBLESHOOTING.md
 *.PNG
 *.png
+launch_mset.py
+start-all.bat
+start-all.ps1
