@@ -83,7 +83,7 @@ Copy `.env.example` to `.env` and fill in your Telegram bot token and chat ID (s
 
 ## Running the Pipeline
 
-Run `start-all.bat` (Windows) to launch all 6 processes in tiled terminal windows:
+Launch all 6 processes. Each opens in its own terminal window arranged in a 2x3 grid:
 
 ```
 +--------------------+--------------------+--------------------+
