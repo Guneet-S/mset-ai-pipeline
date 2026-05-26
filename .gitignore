@@ -14,3 +14,8 @@ TROUBLESHOOTING.md
 launch_mset.py
 start-all.bat
 start-all.ps1
+confirm_mset.py
+generate_pdf.py
+orchestrator/sse_listener.py
+agents/automation/listen.ps1
+agents/automation/sse_listener.ps1
