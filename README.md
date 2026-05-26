@@ -52,7 +52,9 @@ User (Telegram @Donna_mset_bot or console)
 User receives all 3 output files via Telegram
 ```
 
-All agent-to-agent communication goes through a central **message broker** (`broker.ts`, Bun/TypeScript, port 7801). Agents poll `/poll/:agent` every 5 seconds. Messages carry file paths only — never large content.
+All agent-to-agent communication goes through a central **message broker** (`broker.ts`, Bun/TypeScript). Agents poll the broker on a fixed interval. The broker is stateless — it queues messages until each agent picks them up.
+
+> Full technical design — broker protocol, agent prompt engineering, and classification framework — discussed during interview.
 
 ---
 
@@ -72,12 +74,7 @@ git clone https://github.com/Guneet-S/mset-ai-pipeline.git
 cd mset-ai-pipeline
 ```
 
-Copy `.env.example` to `.env` and fill in your Telegram bot token:
-```
-MSET_BOT_TOKEN=your_telegram_bot_token_here
-MSET_OWNER_CHAT_ID=your_telegram_chat_id_here
-BROKER_URL=http://localhost:7801
-```
+Copy `.env.example` to `.env` and fill in your Telegram bot token and chat ID (see `.env.example` for the required fields).
 
 ---
 
@@ -85,16 +82,7 @@ BROKER_URL=http://localhost:7801
 
 Double-click `start-all.bat`.
 
-Opens 6 windows arranged on screen:
-```
-+--------------------+--------------------+--------------------+
-|      BROKER        |   ORCHESTRATOR     |   TELEGRAM-BOT     |
-|   (port 7801)      |   (Donna)          |  (@Donna_mset_bot) |
-+--------------------+--------------------+--------------------+
-|  TEST-PLAN-AGENT   |  TEST-CASE-AGENT   | AUTOMATION-AGENT   |
-|    (Agent 2)       |    (Agent 3)       |    (Agent 4)       |
-+--------------------+--------------------+--------------------+
-```
+Opens 6 terminal windows (Broker, Orchestrator, Telegram Bot, and 3 specialist agents) tiled on screen. Each agent starts, registers with the broker, and enters a polling loop.
 
 Then send **NEW** to `@Donna_mset_bot` on Telegram to start a project.
 
