@@ -163,14 +163,14 @@ SSE streams on Windows dropped with reconnect errors, causing duplicate message 
 
 ## Challenges
 
-**Duplicate Telegram messages**
-The Telegram bot originally used an SSE listener thread for broker messages and a polling loop for Telegram updates. On Windows, Bun SSE reconnects re-delivered queued messages, so every update arrived twice. Fixed by removing the SSE thread entirely — the bot now polls the broker on a fixed interval only.
+**Multi-process agent communication on Windows (Infrastructure)**
+Running four independent Claude Code CLI processes that reliably communicate on a single machine required solving a message delivery problem. Server-sent events (SSE) dropped connections on reconnect and re-delivered queued messages, causing duplicates across the Telegram bot and all agents. The fix was replacing every SSE listener with a simple polling loop — each agent polls the broker on a fixed interval, which is stateless, restartable, and produces no duplicates. This pattern also means any agent can crash and resume without losing messages.
 
-**Agents writing to wrong output paths**
-Without an absolute `project_path` in every broker message, agents defaulted to their own local directories. The Orchestrator could not find the files. Fixed by including the full absolute project path in every broker payload so all four agents read and write to the same location.
+**Test case classification accuracy (QA)**
+Deciding whether a test case should be Automate, Manual, or Hybrid is a judgment call that the agent had to make consistently across different feature types and platforms. Early runs produced inconsistent results — visual layout checks tagged as Automate, simple login flows tagged as Hybrid. The fix was defining explicit rule-based classification criteria: Automate for anything repetitive, data-driven, or regression-critical; Manual for anything requiring human judgment on UI feel or visual accuracy; Hybrid for flows where automation handles setup but a human verifies the final state. Consistency improved significantly once the rules were unambiguous.
 
-**Keeping the pipeline autonomous**
-Claude Code's interactive permission prompts interrupted the pipeline mid-run. Fixed with `--dangerously-skip-permissions` on all agent launchers, allowing the pipeline to run end-to-end without manual intervention.
+**Calibrating test volume per test type (QA)**
+Without explicit volume targets, the agent over-generated for smoke runs (30+ cases instead of ~10) and under-covered regression scenarios. Fixed by defining scaling rules per test type and priority filter combination, and specifying mandatory coverage areas (authentication, catalog, cart, checkout, UX) that must always be represented. This ensured output was proportionate and complete without manual trimming after each generation run.
 
 ---
 
