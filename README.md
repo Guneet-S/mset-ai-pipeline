@@ -83,9 +83,17 @@ Copy `.env.example` to `.env` and fill in your Telegram bot token and chat ID (s
 
 ## Running the Pipeline
 
-Double-click `start-all.bat`.
+Run `start-all.bat` (Windows) to launch all 6 processes in tiled terminal windows:
 
-Opens 6 terminal windows (Broker, Orchestrator, Telegram Bot, and 3 specialist agents) tiled on screen. Each agent starts, registers with the broker, and enters a polling loop.
+```
++--------------------+--------------------+--------------------+
+|      BROKER        |   ORCHESTRATOR     |   TELEGRAM-BOT     |
++--------------------+--------------------+--------------------+
+|  TEST-PLAN-AGENT   |  TEST-CASE-AGENT   | AUTOMATION-AGENT   |
++--------------------+--------------------+--------------------+
+```
+
+Each agent starts, registers with the broker, and enters a polling loop.
 
 Then send **NEW** to `@Donna_mset_bot` on Telegram to start a project.
 
