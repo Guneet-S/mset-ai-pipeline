@@ -42,7 +42,8 @@ Step 4: Receive test-cases.json, send to Telegram for human review
         [HUMAN CHECKPOINT] — wait for PROCEED or REVISE
 Step 5: Send automatable cases to AutomationAgent
 Step 6: Receive spec files
-Step 7: Send all output files to user via Telegram
+Step 6.5: Generate traceability.json — maps each module to its test case IDs and automation spec file
+Step 7: Send all output files to user via Telegram (test-plan.md, test-cases.json, traceability.json, spec files)
 ```
 
 Human checkpoints support a revision loop — user can request changes before each phase proceeds.

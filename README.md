@@ -13,7 +13,8 @@ AI-powered test automation pipeline. Four autonomous Claude Code agents collabor
 5. **Agent 3** writes test cases classified as Manual / Automate / Hybrid → sent to you for review
 6. You approve or revise
 7. **Agent 4** generates runnable WebDriverIO `.spec.ts` files for all automatable cases
-8. All output files delivered to Telegram
+8. Orchestrator builds a traceability matrix mapping each module to its test case IDs and spec file
+9. All output files (test plan, test cases, traceability matrix, spec files) delivered to Telegram
 
 ---
 
@@ -49,7 +50,7 @@ User (Telegram @Donna_mset_bot or console)
         |<──── automation_ready ───────────────+
         |
         v
-User receives all 3 output files via Telegram
+User receives all output files via Telegram (test-plan.md, test-cases.json, traceability.json, *.spec.ts)
 ```
 
 All agent-to-agent communication goes through a central **message broker** (`broker.ts`, Bun/TypeScript). Agents poll the broker on a fixed interval. The broker is stateless — it queues messages until each agent picks them up.
@@ -110,6 +111,7 @@ All outputs saved under `projects/<project-name>/output/`:
 | `output/test-cases.json` | Agent 3 | Full test case list with Manual / Automate / Hybrid labels |
 | `output/specs/*.spec.ts` | Agent 4 | WebDriverIO + Appium spec files, one per module |
 | `output/pages/*.page.ts` | Agent 4 | Page Object Models — extend BasePage from existing framework when framework path is provided |
+| `output/traceability.json` | Orchestrator | Traceability matrix — maps each module to its test case IDs and automation spec file |
 
 Each project folder also contains:
 - `SESSION.md` — pipeline progress checklist
@@ -201,7 +203,7 @@ Without explicit volume targets, the agent over-generated for smoke runs (30+ ca
 
 ## What I Would Improve
 
-1. **Zephyr Scale integration** — export `test-cases.json` to Jira via REST API for full traceability (requirement → test case → script path mapping)
+1. **Zephyr Scale integration** — the pipeline already generates `traceability.json` (requirement → test case → script path); next step is pushing that directly to Jira via the Zephyr Scale REST API so the matrix lives in the test management system, not just the local output folder
 2. **Multi-source input** — accept Confluence pages, Jira tickets, or Figma specs as requirement input alongside free-text descriptions
 3. **CI/CD trigger** — GitHub Actions workflow to auto-run the pipeline when a new feature branch is opened
 4. **Execution layer** — connect `wdio.conf.ts` to Sauce Labs cloud to run generated specs on real devices immediately after generation
