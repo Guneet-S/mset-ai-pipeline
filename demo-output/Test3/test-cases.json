@@ -1,0 +1,383 @@
+[
+  {
+    "id": "TC-001",
+    "title": "Valid login with standard_user credentials",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "User is redirected to the product catalog page (/inventory.html)",
+    "test_data": { "username": "standard_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-002",
+    "title": "Login fails with incorrect password",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Enter 'wrong_password' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "Error message 'Epic sadface: Username and password do not match any user in this service' is displayed; user remains on login page",
+    "test_data": { "username": "standard_user", "password": "wrong_password" }
+  },
+  {
+    "id": "TC-003",
+    "title": "Login fails with completely invalid credentials",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'invalid_user' in the Username field",
+      "Enter 'invalid_pass' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "Error message is displayed; user remains on login page",
+    "test_data": { "username": "invalid_user", "password": "invalid_pass" }
+  },
+  {
+    "id": "TC-004",
+    "title": "Locked-out user cannot log in",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'locked_out_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "Error message 'Epic sadface: Sorry, this user has been locked out.' is displayed; user remains on login page",
+    "test_data": { "username": "locked_out_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-005",
+    "title": "Login fails when Username field is empty",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Leave the Username field empty",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "Error message 'Epic sadface: Username is required' is displayed",
+    "test_data": { "username": "", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-006",
+    "title": "Login fails when Password field is empty",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Leave the Password field empty",
+      "Click the Login button"
+    ],
+    "expected": "Error message 'Epic sadface: Password is required' is displayed",
+    "test_data": { "username": "standard_user", "password": "" }
+  },
+  {
+    "id": "TC-007",
+    "title": "Login fails when both fields are empty",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Leave both Username and Password fields empty",
+      "Click the Login button"
+    ],
+    "expected": "Error message 'Epic sadface: Username is required' is displayed",
+    "test_data": { "username": "", "password": "" }
+  },
+  {
+    "id": "TC-008",
+    "title": "Error message can be dismissed after failed login",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "A failed login attempt has been made and error message is visible",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter invalid credentials and click Login to trigger an error",
+      "Click the X (close) button on the error message"
+    ],
+    "expected": "Error message disappears; login form is displayed without error styling",
+    "test_data": { "username": "bad_user", "password": "bad_pass" }
+  },
+  {
+    "id": "TC-009",
+    "title": "Successful logout returns user to login page",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User is logged in as standard_user",
+    "steps": [
+      "Click the hamburger menu icon (top-left)",
+      "Click 'Logout' in the side navigation"
+    ],
+    "expected": "User is redirected to the login page; session is cleared",
+    "test_data": { "username": "standard_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-010",
+    "title": "Product catalog loads all items after login",
+    "module": "Product Catalog",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in as standard_user",
+    "steps": [
+      "Log in with standard_user credentials",
+      "Observe the product catalog page"
+    ],
+    "expected": "6 products are displayed with name, image, description, price, and Add to Cart button for each",
+    "test_data": { "username": "standard_user", "password": "secret_sauce", "expected_product_count": 6 }
+  },
+  {
+    "id": "TC-011",
+    "title": "Sort products by Name A to Z",
+    "module": "Product Catalog",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Click the sort dropdown (default: 'Name (A to Z)')",
+      "Select 'Name (A to Z)' from the dropdown"
+    ],
+    "expected": "Products are listed in ascending alphabetical order by name",
+    "test_data": { "sort_option": "az", "expected_first": "Sauce Labs Backpack", "expected_last": "Test.allTheThings() T-Shirt (Red)" }
+  },
+  {
+    "id": "TC-012",
+    "title": "Sort products by Name Z to A",
+    "module": "Product Catalog",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Click the sort dropdown",
+      "Select 'Name (Z to A)' from the dropdown"
+    ],
+    "expected": "Products are listed in descending alphabetical order by name",
+    "test_data": { "sort_option": "za", "expected_first": "Test.allTheThings() T-Shirt (Red)", "expected_last": "Sauce Labs Backpack" }
+  },
+  {
+    "id": "TC-013",
+    "title": "Sort products by Price Low to High",
+    "module": "Product Catalog",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Click the sort dropdown",
+      "Select 'Price (low to high)' from the dropdown"
+    ],
+    "expected": "Products are listed in ascending price order; cheapest item appears first",
+    "test_data": { "sort_option": "lohi", "expected_first_price": 7.99 }
+  },
+  {
+    "id": "TC-014",
+    "title": "Sort products by Price High to Low",
+    "module": "Product Catalog",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Click the sort dropdown",
+      "Select 'Price (high to low)' from the dropdown"
+    ],
+    "expected": "Products are listed in descending price order; most expensive item appears first",
+    "test_data": { "sort_option": "hilo", "expected_first_price": 49.99 }
+  },
+  {
+    "id": "TC-015",
+    "title": "Product detail page opens with correct information",
+    "module": "Product Catalog",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Click on the product name 'Sauce Labs Backpack'",
+      "Observe the product detail page"
+    ],
+    "expected": "Detail page shows correct product name, image, description, price ($29.99), and Add to Cart button",
+    "test_data": { "product_name": "Sauce Labs Backpack", "expected_price": 29.99 }
+  },
+  {
+    "id": "TC-016",
+    "title": "Back button on product detail returns to catalog",
+    "module": "Product Catalog",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User is on a product detail page",
+    "steps": [
+      "Click on any product to open its detail page",
+      "Click the 'Back to products' button"
+    ],
+    "expected": "User is returned to the product catalog page with all items visible",
+    "test_data": { "product_name": "Sauce Labs Backpack" }
+  },
+  {
+    "id": "TC-017",
+    "title": "Product images load correctly on catalog page",
+    "module": "Product Catalog",
+    "priority": "Medium",
+    "type": "Manual",
+    "preconditions": "User is logged in and on the product catalog page",
+    "steps": [
+      "Observe all product cards on the catalog page",
+      "Check that each product has a visible, non-broken image"
+    ],
+    "expected": "All 6 product images render without broken image icons or placeholder errors",
+    "test_data": null
+  },
+  {
+    "id": "TC-018",
+    "title": "Add a single item to the cart from catalog",
+    "module": "Cart",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page; cart is empty",
+    "steps": [
+      "Click 'Add to cart' on the 'Sauce Labs Backpack' product card",
+      "Observe the cart icon in the top-right corner"
+    ],
+    "expected": "Cart badge appears showing count '1'; the button changes to 'Remove'",
+    "test_data": { "product_name": "Sauce Labs Backpack", "expected_badge": "1" }
+  },
+  {
+    "id": "TC-019",
+    "title": "Add multiple items to the cart and verify badge count",
+    "module": "Cart",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page; cart is empty",
+    "steps": [
+      "Click 'Add to cart' on 'Sauce Labs Backpack'",
+      "Click 'Add to cart' on 'Sauce Labs Bike Light'",
+      "Click 'Add to cart' on 'Sauce Labs Bolt T-Shirt'",
+      "Observe the cart badge"
+    ],
+    "expected": "Cart badge shows count '3'",
+    "test_data": {
+      "products": ["Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt"],
+      "expected_badge": "3"
+    }
+  },
+  {
+    "id": "TC-020",
+    "title": "Cart badge increments correctly with each added item",
+    "module": "Cart",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "User is logged in and on the product catalog page; cart is empty",
+    "steps": [
+      "Click 'Add to cart' on item 1 — verify badge shows '1'",
+      "Click 'Add to cart' on item 2 — verify badge shows '2'",
+      "Click 'Add to cart' on item 3 — verify badge shows '3'"
+    ],
+    "expected": "Badge count increments by 1 after each add action",
+    "test_data": {
+      "products": ["Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt"],
+      "expected_badges": ["1", "2", "3"]
+    }
+  },
+  {
+    "id": "TC-021",
+    "title": "Remove an item from the catalog page updates badge",
+    "module": "Cart",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User is logged in; 'Sauce Labs Backpack' has been added to cart (badge = 1)",
+    "steps": [
+      "Click the 'Remove' button on the 'Sauce Labs Backpack' product card"
+    ],
+    "expected": "Cart badge disappears (count = 0); button reverts to 'Add to cart'",
+    "test_data": { "product_name": "Sauce Labs Backpack", "expected_badge_after": "0" }
+  },
+  {
+    "id": "TC-022",
+    "title": "Cart page shows correct items and totals",
+    "module": "Cart",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User has added 'Sauce Labs Backpack' ($29.99) and 'Sauce Labs Bike Light' ($9.99) to the cart",
+    "steps": [
+      "Click the cart icon in the top-right corner",
+      "Observe the cart page contents"
+    ],
+    "expected": "Both items are listed with correct names and prices; item count matches badge",
+    "test_data": {
+      "products": [
+        { "name": "Sauce Labs Backpack", "price": 29.99 },
+        { "name": "Sauce Labs Bike Light", "price": 9.99 }
+      ],
+      "expected_badge": "2"
+    }
+  },
+  {
+    "id": "TC-023",
+    "title": "Cart persists when navigating back to the catalog",
+    "module": "Cart",
+    "priority": "Medium",
+    "type": "Hybrid",
+    "preconditions": "User has 2 items in the cart",
+    "steps": [
+      "Add 2 items to the cart (automated setup)",
+      "Navigate to the product catalog via 'Continue Shopping' or browser back",
+      "Visually confirm the cart badge still shows '2' and items remain in cart"
+    ],
+    "expected": "Cart state is preserved across page navigation; badge count unchanged",
+    "test_data": { "products": ["Sauce Labs Backpack", "Sauce Labs Bike Light"], "expected_badge": "2" }
+  },
+  {
+    "id": "TC-024",
+    "title": "Add to cart from product detail page updates catalog button state",
+    "module": "Cart",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "User is logged in; cart is empty",
+    "steps": [
+      "Click on 'Sauce Labs Backpack' to open the detail page",
+      "Click 'Add to cart' on the detail page",
+      "Click 'Back to products'",
+      "Observe the 'Sauce Labs Backpack' card on the catalog"
+    ],
+    "expected": "Product card shows 'Remove' button; cart badge shows '1'",
+    "test_data": { "product_name": "Sauce Labs Backpack", "expected_badge": "1" }
+  },
+  {
+    "id": "TC-025",
+    "title": "Empty cart state is displayed correctly",
+    "module": "Cart",
+    "priority": "Medium",
+    "type": "Manual",
+    "preconditions": "User is logged in; no items have been added to the cart",
+    "steps": [
+      "Click the cart icon without adding any items",
+      "Observe the cart page"
+    ],
+    "expected": "Cart page shows an empty state with no items listed; no cart badge visible on the icon",
+    "test_data": null
+  }
+]

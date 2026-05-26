@@ -1,0 +1,63 @@
+{
+  "project": "test3",
+  "feature": "Login and product catalog for Sauce Labs demo app. Supports username/password login, product listing with sort, and add to cart flow.",
+  "test_plan": "C:/Users/Administrator/Desktop/mset-ai-pipeline/projects/test3/output/test-plan.md",
+  "generated_at": "2026-05-26T18:35:26.811125Z",
+  "traceability": [
+    {
+      "module": "Authentication",
+      "test_cases": [
+        "TC-001",
+        "TC-002",
+        "TC-003",
+        "TC-004",
+        "TC-005",
+        "TC-006",
+        "TC-007",
+        "TC-008",
+        "TC-009"
+      ],
+      "automation_file": "C:/Users/Administrator/Desktop/mset-ai-pipeline/projects/test3/output/specs/authentication.spec.ts",
+      "coverage": [
+        "Automate"
+      ]
+    },
+    {
+      "module": "Product Catalog",
+      "test_cases": [
+        "TC-010",
+        "TC-011",
+        "TC-012",
+        "TC-013",
+        "TC-014",
+        "TC-015",
+        "TC-016",
+        "TC-017"
+      ],
+      "automation_file": "C:/Users/Administrator/Desktop/mset-ai-pipeline/projects/test3/output/specs/productcatalog.spec.ts",
+      "coverage": [
+        "Manual",
+        "Automate"
+      ]
+    },
+    {
+      "module": "Cart",
+      "test_cases": [
+        "TC-018",
+        "TC-019",
+        "TC-020",
+        "TC-021",
+        "TC-022",
+        "TC-023",
+        "TC-024",
+        "TC-025"
+      ],
+      "automation_file": "C:/Users/Administrator/Desktop/mset-ai-pipeline/projects/test3/output/specs/cart.spec.ts",
+      "coverage": [
+        "Hybrid",
+        "Automate",
+        "Manual"
+      ]
+    }
+  ]
+}

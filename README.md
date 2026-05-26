@@ -166,7 +166,23 @@ The included `wdio.conf.ts` picks up all spec files from `projects/*/output/spec
 
 ## Sample Output
 
-The `sample-output/` folder contains real output from a pipeline run targeting [https://www.saucedemo.com](https://www.saucedemo.com):
+### demo-output/Test3 — Full run with framework integration and traceability
+
+Real output from a pipeline run targeting [https://www.saucedemo.com](https://www.saucedemo.com) with an existing framework provided at Q7:
+
+| File | Description |
+|------|-------------|
+| `demo-output/Test3/test-plan.md` | Structured test plan |
+| `demo-output/Test3/test-cases.json` | Full test case list with Manual / Automate / Hybrid labels |
+| `demo-output/Test3/traceability.json` | Traceability matrix — 3 modules mapped to test case IDs and spec files |
+| `demo-output/Test3/specs/authentication.spec.ts` | Spec file — Authentication module |
+| `demo-output/Test3/specs/cart.spec.ts` | Spec file — Cart module |
+| `demo-output/Test3/specs/productcatalog.spec.ts` | Spec file — Product Catalog module |
+| `demo-output/Test3/pages/login.page.ts` | Page Object extending BasePage, importing from framework selectors |
+| `demo-output/Test3/pages/cart.page.ts` | Page Object — Cart |
+| `demo-output/Test3/pages/catalog.page.ts` | Page Object — Product Catalog |
+
+### sample-output — Single module reference run
 
 | File | Description |
 |------|-------------|
