@@ -7,7 +7,7 @@ AI-powered test automation pipeline. Four autonomous Claude Code agents collabor
 ## What it does
 
 1. You send a feature description to Donna (Orchestrator) via Telegram or console
-2. Donna asks 6 intake questions (project name, platform, test type, priority, app)
+2. Donna asks 7 intake questions (project name, platform, test type, priority, app, existing framework path)
 3. **Agent 2** writes a structured test plan → sent to you for review
 4. You approve (`PROCEED`) or request changes (`REVISE [what to change]`)
 5. **Agent 3** writes test cases classified as Manual / Automate / Hybrid → sent to you for review
@@ -24,7 +24,7 @@ AI-powered test automation pipeline. Four autonomous Claude Code agents collabor
 | Orchestrator (Donna) | Coordinator — intake, routing, human checkpoints | Feature description | project.config.json, session files |
 | TestPlanAgent | Test planner | Feature + config | test-plan.md |
 | TestCaseAgent | Test case writer + classifier | Test plan | test-cases.json |
-| AutomationAgent | Code generator | Automatable cases | *.spec.ts + *.page.ts |
+| AutomationAgent | Repo-aware code generator — scans existing framework before generating | Automatable cases + framework path | *.spec.ts + *.page.ts |
 
 ---
 
@@ -53,6 +53,8 @@ User receives all 3 output files via Telegram
 ```
 
 All agent-to-agent communication goes through a central **message broker** (`broker.ts`, Bun/TypeScript). Agents poll the broker on a fixed interval. The broker is stateless — it queues messages until each agent picks them up.
+
+If an existing framework path is provided at intake, AutomationAgent scans `framework/pages/`, `framework/helpers/`, and `framework/selectors/` before generating — output extends the existing codebase rather than creating a parallel structure.
 
 > Full technical design — broker protocol, agent prompt engineering, and classification framework — discussed during interview.
 
@@ -91,7 +93,7 @@ Then send **NEW** to `@Donna_mset_bot` on Telegram to start a project.
 ## Telegram Control
 
 - Send `NEW` to start a new project
-- Answer Donna's 6 intake questions
+- Answer Donna's 7 intake questions (Q7 asks for an existing framework path — type path or "no")
 - Receive `test-plan.md` for review — reply `PROCEED` or `REVISE [what to change]`
 - Receive `test-cases.json` for review — reply `PROCEED` or `REVISE`
 - Receive all output files when the pipeline completes
@@ -107,11 +109,31 @@ All outputs saved under `projects/<project-name>/output/`:
 | `output/test-plan.md` | Agent 2 | Structured test plan (scope, approach, risks, timeline) |
 | `output/test-cases.json` | Agent 3 | Full test case list with Manual / Automate / Hybrid labels |
 | `output/specs/*.spec.ts` | Agent 4 | WebDriverIO + Appium spec files, one per module |
-| `output/pages/*.page.ts` | Agent 4 | Page Object Models |
+| `output/pages/*.page.ts` | Agent 4 | Page Object Models — extend BasePage from existing framework when framework path is provided |
 
 Each project folder also contains:
 - `SESSION.md` — pipeline progress checklist
 - `HANDOFF.md` — resume state (pick up where you left off)
+
+---
+
+## Existing Framework Integration
+
+The `framework/` folder simulates a company's existing automation codebase. It contains:
+
+| File | Purpose |
+|------|---------|
+| `framework/pages/base.page.ts` | BasePage — parent class all page objects extend |
+| `framework/pages/product.page.ts` | Example existing page written by the QA team |
+| `framework/helpers/wait.helper.ts` | Shared wait utilities (waitForElement, waitForText, waitForUrl) |
+| `framework/selectors/app.selectors.ts` | Centralised selector constants — all selectors in one place |
+
+When you provide this path at Q7, AutomationAgent reads all four files before writing a single line of code. Generated page objects extend `BasePage`, import selectors from `app.selectors.ts`, and use helpers from `wait.helper.ts` — output that looks like it was written by the existing team, not generated from scratch.
+
+To test with the included sample framework, answer Q7 with:
+```
+C:/Users/Administrator/Desktop/mset-ai-pipeline/framework
+```
 
 ---
 
@@ -158,6 +180,9 @@ Passing full JSON payloads through the broker caused hangs when test case output
 
 **Why polling instead of server-sent events?**
 SSE streams on Windows dropped with reconnect errors, causing duplicate message delivery to the Telegram bot. Replacing the SSE listener with a simple polling loop eliminated duplicates entirely — easier to reason about and debug.
+
+**Why framework ingestion before generation?**
+AutomationAgent reads the existing page objects, selectors, and helpers before writing any code. This ensures generated output extends the existing codebase — same base class, same selector naming, same helper imports — rather than creating a parallel structure that a real team would have to merge and reconcile.
 
 ---
 
