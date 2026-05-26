@@ -145,6 +145,45 @@ The `sample-output/` folder contains real output from a pipeline run targeting [
 
 ---
 
+## Design Decisions
+
+**Why Claude Code CLI as the agent runtime?**
+Each agent is a Claude Code CLI process running its own CLAUDE.md instruction file. This gives every agent a persistent, stateful session with full tool access (file I/O, HTTP, bash) without any wrapper code. The agent IS the LLM — no orchestration SDK needed. Each agent has a single responsibility and can be updated, replaced, or debugged independently.
+
+**Why a message broker instead of direct agent calls?**
+Agents communicate through a central HTTP broker (`broker.ts`) rather than calling each other directly. This decouples them — if one agent is slow, the Orchestrator keeps polling and the pipeline does not stall. If an agent crashes and restarts, it re-registers and picks up from the queue. Direct agent-to-agent calls would create tight coupling and make the pipeline brittle.
+
+**Why file paths in broker messages, not content?**
+Passing full JSON payloads through the broker caused hangs when test case output was large (50+ cases). The fix: agents send only the file path, and downstream agents read from disk directly. The broker stays stateless and lightweight regardless of payload size.
+
+**Why polling instead of server-sent events?**
+SSE streams on Windows dropped with reconnect errors, causing duplicate message delivery to the Telegram bot. Replacing the SSE listener with a simple polling loop eliminated duplicates entirely — easier to reason about and debug.
+
+---
+
+## Challenges
+
+**Duplicate Telegram messages**
+The Telegram bot originally used an SSE listener thread for broker messages and a polling loop for Telegram updates. On Windows, Bun SSE reconnects re-delivered queued messages, so every update arrived twice. Fixed by removing the SSE thread entirely — the bot now polls the broker on a fixed interval only.
+
+**Agents writing to wrong output paths**
+Without an absolute `project_path` in every broker message, agents defaulted to their own local directories. The Orchestrator could not find the files. Fixed by including the full absolute project path in every broker payload so all four agents read and write to the same location.
+
+**Keeping the pipeline autonomous**
+Claude Code's interactive permission prompts interrupted the pipeline mid-run. Fixed with `--dangerously-skip-permissions` on all agent launchers, allowing the pipeline to run end-to-end without manual intervention.
+
+---
+
+## What I Would Improve
+
+1. **Zephyr Scale integration** — export `test-cases.json` to Jira via REST API for full traceability (requirement → test case → script path mapping)
+2. **Multi-source input** — accept Confluence pages, Jira tickets, or Figma specs as requirement input alongside free-text descriptions
+3. **CI/CD trigger** — GitHub Actions workflow to auto-run the pipeline when a new feature branch is opened
+4. **Execution layer** — connect `wdio.conf.ts` to Sauce Labs cloud to run generated specs on real devices immediately after generation
+5. **Multi-module generation** — AutomationAgent currently generates one spec file per module; extend to handle full apps with 10+ modules in a single run
+
+---
+
 ## Future Improvements
 
 - **Zephyr Scale** — export test-cases.json to Jira via REST API
