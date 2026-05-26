@@ -1,0 +1,235 @@
+[
+  {
+    "id": "TC-001",
+    "title": "Valid login with correct credentials",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable, standard_user account exists",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "User is redirected to the products page at /inventory.html and the product list is visible",
+    "test_data": { "username": "standard_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-002",
+    "title": "Login rejected with invalid username",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'wrong_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "An error message is displayed: 'Epic sadface: Username and password do not match any user in this service'. User remains on the login page.",
+    "test_data": { "username": "wrong_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-003",
+    "title": "Login rejected with invalid password",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Enter 'wrong_password' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "An error message is displayed: 'Epic sadface: Username and password do not match any user in this service'. User remains on the login page.",
+    "test_data": { "username": "standard_user", "password": "wrong_password" }
+  },
+  {
+    "id": "TC-004",
+    "title": "Locked-out user cannot log in",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'locked_out_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button"
+    ],
+    "expected": "An error message is displayed: 'Epic sadface: Sorry, this user has been locked out.' User remains on the login page.",
+    "test_data": { "username": "locked_out_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-005",
+    "title": "Login rejected when both fields are empty",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Leave the Username field empty",
+      "Leave the Password field empty",
+      "Click the Login button"
+    ],
+    "expected": "An error message is displayed: 'Epic sadface: Username is required'. User remains on the login page.",
+    "test_data": { "username": "", "password": "" }
+  },
+  {
+    "id": "TC-006",
+    "title": "Login rejected when only username is provided",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Automate",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'standard_user' in the Username field",
+      "Leave the Password field empty",
+      "Click the Login button"
+    ],
+    "expected": "An error message is displayed: 'Epic sadface: Password is required'. User remains on the login page.",
+    "test_data": { "username": "standard_user", "password": "" }
+  },
+  {
+    "id": "TC-007",
+    "title": "Login page loads correctly on navigation",
+    "module": "Authentication",
+    "priority": "High",
+    "type": "Automate",
+    "preconditions": "Browser is open with network access",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Verify the page title is 'Swag Labs'",
+      "Verify the Username input field is visible",
+      "Verify the Password input field is visible",
+      "Verify the Login button is visible and enabled"
+    ],
+    "expected": "Login page renders with all expected elements present and the URL is https://www.saucedemo.com/",
+    "test_data": { "url": "https://www.saucedemo.com" }
+  },
+  {
+    "id": "TC-008",
+    "title": "Error message clarity and wording for invalid credentials",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Manual",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter any invalid username and password combination",
+      "Click the Login button",
+      "Read the error message displayed",
+      "Assess whether the wording is clear and helpful to a real user",
+      "Check that the error icon (X) is visible next to the message"
+    ],
+    "expected": "Error message is clearly worded, not misleading, and provides enough context for the user to understand what went wrong without revealing security-sensitive information",
+    "test_data": {}
+  },
+  {
+    "id": "TC-009",
+    "title": "Login form visual layout and alignment",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Manual",
+    "preconditions": "Browser is open at a 1280x800 desktop viewport",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Inspect the overall page layout — logo, form container, field labels",
+      "Verify the Username and Password fields are visually aligned",
+      "Verify the Login button spans the expected width",
+      "Check that there is adequate spacing between elements",
+      "Check that no elements overlap or are cut off"
+    ],
+    "expected": "Login form is visually balanced, fields and button are properly aligned, no UI clutter or broken layout",
+    "test_data": {}
+  },
+  {
+    "id": "TC-010",
+    "title": "Exploratory UX pass on login flow",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Manual",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Tab through all form fields using the keyboard",
+      "Enter credentials using keyboard only (no mouse)",
+      "Press Enter to submit the form",
+      "Attempt to navigate back after a successful login",
+      "Note any unexpected or confusing behaviour"
+    ],
+    "expected": "All interactions feel intuitive; keyboard navigation works without issues; pressing Enter submits the form; back navigation behaves predictably",
+    "test_data": {}
+  },
+  {
+    "id": "TC-011",
+    "title": "Input field placeholder text is present and correct",
+    "module": "Authentication",
+    "priority": "Low",
+    "type": "Manual",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Observe the placeholder text in the Username field before typing",
+      "Observe the placeholder text in the Password field before typing",
+      "Verify placeholder text disappears when the field is focused and typed into"
+    ],
+    "expected": "Username field shows placeholder 'Username', Password field shows placeholder 'Password'; both disappear upon user input",
+    "test_data": {}
+  },
+  {
+    "id": "TC-012",
+    "title": "Login button and field tap target size (accessibility check)",
+    "module": "Authentication",
+    "priority": "Low",
+    "type": "Manual",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Use browser DevTools to inspect the computed height of the Username field",
+      "Inspect the computed height of the Password field",
+      "Inspect the computed height of the Login button",
+      "Verify all interactive elements meet a minimum 44px height"
+    ],
+    "expected": "All interactive form elements are at least 44px tall, meeting WCAG 2.5.5 target size guidance",
+    "test_data": {}
+  },
+  {
+    "id": "TC-013",
+    "title": "Problem user can log in (degraded experience acknowledged)",
+    "module": "Authentication",
+    "priority": "Medium",
+    "type": "Hybrid",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Enter 'problem_user' in the Username field",
+      "Enter 'secret_sauce' in the Password field",
+      "Click the Login button",
+      "Manually verify that the products page loads (images may be broken — this is expected behaviour for problem_user)"
+    ],
+    "expected": "User is redirected to /inventory.html. Automated check confirms redirection; manual check notes any visual anomalies on the product page as known issues.",
+    "test_data": { "username": "problem_user", "password": "secret_sauce" }
+  },
+  {
+    "id": "TC-014",
+    "title": "Page branding and logo display",
+    "module": "Authentication",
+    "priority": "Low",
+    "type": "Manual",
+    "preconditions": "Browser is open, https://www.saucedemo.com is reachable",
+    "steps": [
+      "Navigate to https://www.saucedemo.com",
+      "Verify the Swag Labs logo is visible at the top of the login page",
+      "Verify the logo is not broken (no missing image icon)",
+      "Verify the page favicon is present in the browser tab"
+    ],
+    "expected": "Logo renders correctly, page favicon is visible, branding is consistent with the Sauce Labs demo app identity",
+    "test_data": {}
+  }
+]

@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outDir": "./dist",
+        "sourceMap": true,
+        "types": [
+            "node",
+            "@wdio/globals/types",
+            "expect-webdriverio"
+        ]
+    },
+    "include": [
+        "./wdio.conf.ts",
+        "./projects/**/output/specs/**/*.spec.ts",
+        "./projects/**/output/pages/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

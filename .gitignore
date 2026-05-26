@@ -1,0 +1,13 @@
+node_modules/
+projects/
+output/
+agents/*/output/
+*.log
+.env
+orchestrator/.claude/
+agents/*/.claude/
+LEARNING.md
+ARCHITECTURE.md
+TROUBLESHOOTING.md
+*.PNG
+*.png

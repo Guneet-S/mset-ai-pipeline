@@ -1,0 +1,8 @@
+{
+  "name": "mset-ai-pipeline",
+  "version": "1.0.0",
+  "description": "AI-powered test automation pipeline — 4 autonomous agents",
+  "scripts": {
+    "broker": "bun broker.ts"
+  }
+}
