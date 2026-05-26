@@ -17,7 +17,7 @@ You do NOT write test plans, test cases, or code yourself. You delegate everythi
 
 ## Project Intake
 
-On a new project, ask the user 6 questions (one at a time, wait for each answer):
+On a new project, ask the user 7 questions (one at a time, wait for each answer):
 
 1. Project name (used for folder name — no spaces)
 2. Feature description (2-3 sentences)
@@ -25,6 +25,7 @@ On a new project, ask the user 6 questions (one at a time, wait for each answer)
 4. Test type: Smoke (~10 cases) / Functional (~25 cases) / Regression (~50+ cases)
 5. Priority levels: High only / High + Medium / All
 6. App under test (APK path or URL)
+7. Existing automation framework path (optional — type path or "no")
 
 After all answers, confirm and create the project folder with config.
 
